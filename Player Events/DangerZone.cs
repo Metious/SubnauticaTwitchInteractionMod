@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using UWE;
 
 namespace TwitchInteraction.Player_Events
 {
@@ -76,11 +74,6 @@ namespace TwitchInteraction.Player_Events
 
         public static void TeleportPlayer()
         {
-            CoroutineHost.StartCoroutine(TeleportPlayerAsync());
-        }
-        
-        private static IEnumerator TeleportPlayerAsync()
-        {
             var biomeTeleportData = BiomeConsoleCommand.main.data;
             var locationTeleportData = GotoConsoleCommand.main.data;
 
@@ -96,10 +89,7 @@ namespace TwitchInteraction.Player_Events
             {
                 newPositionData = locationTeleportData.locations[newPositionNum - biomeTeleportData.locations.Length];
             }
-            
-            // queue the teleport until the player is not dead and not in a cinematic and not piloting and the game is not paused.
-            yield return new WaitUntil(() => Player.main.IsAlive() && !Player.main.cinematicModeActive && !Player.main.isPiloting && Time.timeScale > 0f);
-            
+
             Player.main.SetPosition(newPositionData.position);
             Player.main.OnPlayerPositionCheat();
         }
